@@ -24,10 +24,10 @@ describe "UserPages" do
 			it{should have_selector('div.pagination')}
 
 			it "should list each user" do
-				User.all.each do |user|
-					expect(page).to have_selector("li", text: user.name)
-				end
-			end
+		      	User.all.each do |user|
+		        	expect(page).to have_selector('li', text: user.name)
+		      	end
+		    end
 
 		end
 
@@ -91,6 +91,24 @@ describe "UserPages" do
 		describe "with invalid information" do
 			before {click_button "Save changes"}
 			it {should have_content("error")}
+		end
+
+		describe "forbidden attribute" do
+			let (:params) do
+				{user: {
+					admin: true,
+					password: user.password,
+					password_confirmation: user.password
+					}}
+			end
+
+			before do
+				sign_in user, no_capybara: true
+				patch user_path(user), params
+			end
+
+			specify {expect(user.reload).not_to be_admin}
+
 		end
 
 	end
