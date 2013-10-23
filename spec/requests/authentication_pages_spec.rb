@@ -57,6 +57,21 @@ describe "Authentication" do
 
   			let(:user){FactoryGirl.create(:user)}
 
+
+        describe "In the Microposts Controller" do
+          describe "submitting to the create action" do
+            before {post microposts_path}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
+
+          describe "submitting to the destroy action" do
+            before {delete micropost_path(FactoryGirl.create(:micropost))}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
+
+        end
+
+
   			describe "In the User Controller" do
 
   				describe "visiting the edit page" do
@@ -123,8 +138,8 @@ describe "Authentication" do
   				before {delete user_path(admin)}
   				specify{expect(response).to redirect_to(users_url)}
   			end
-  		end
 
+  		end
 
   	end
 
